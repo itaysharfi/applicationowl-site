@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node (if added later)
+node_modules/
+package-lock.json
+
+# Environment
+.env
+.env.*
+
+# Build artifacts
+dist/
+.cache/
+
+# Tests
+tests/screenshots/
+
+# Claude
+.claude/
