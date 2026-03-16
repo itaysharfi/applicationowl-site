@@ -42,7 +42,7 @@ def load_html_files():
 def validate_links(pages):
     """Check all internal links point to valid files, no broken hrefs."""
     print("\n== LINKS ==")
-    valid_targets = set(PAGES) | {"/", "#STRIPE_AI_COACH_LINK"}
+    valid_targets = set(PAGES) | {"/", "https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02"}
 
     for page_name, html in pages.items():
         if page_name == "style.css":
@@ -53,7 +53,7 @@ def validate_links(pages):
                 continue
             if href == "/":
                 continue
-            if href == "#STRIPE_AI_COACH_LINK":
+            if href == "https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02":
                 continue
             if href.startswith("css/") or href.startswith("images/"):
                 continue  # asset references, not page links
@@ -91,19 +91,19 @@ def validate_stripe_placeholders(pages):
     print("\n== STRIPE / PAYMENT LINKS ==")
 
     # index.html should have 2 Stripe links (hero + pricing CTA)
-    count = pages["index.html"].count("#STRIPE_AI_COACH_LINK")
+    count = pages["index.html"].count("https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02")
     check("index.html has 2 Stripe placeholders", count == 2, f"found {count}")
 
     # ai-coach.html should have 2 Stripe links (hero + pricing CTA)
-    count = pages["ai-coach.html"].count("#STRIPE_AI_COACH_LINK")
+    count = pages["ai-coach.html"].count("https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02")
     check("ai-coach.html has 2 Stripe placeholders", count == 2, f"found {count}")
 
     # pricing.html should have 1 Stripe link (AI Coach card)
-    count = pages["pricing.html"].count("#STRIPE_AI_COACH_LINK")
+    count = pages["pricing.html"].count("https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02")
     check("pricing.html has 1 Stripe placeholder", count == 1, f"found {count}")
 
     # coached-plan.html should have 0 Stripe links (all mailto)
-    count = pages["coached-plan.html"].count("#STRIPE_AI_COACH_LINK")
+    count = pages["coached-plan.html"].count("https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02")
     check("coached-plan.html has 0 Stripe placeholders", count == 0, f"found {count}")
 
     # Coached plan CTAs should be mailto
