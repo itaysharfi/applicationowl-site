@@ -235,6 +235,11 @@
     </div>
   </section>
 
+  <!-- Sticky Mobile CTA -->
+  <div class="sticky-cta" id="sticky-cta">
+    <a href="https://buy.stripe.com/28E4gBc8N4WK5pQ0eLbII02" class="btn btn-primary">Start Your AI Career Coach - $25/mo</a>
+  </div>
+
   <footer>
     <div class="container">
       &copy; 2026 by Application Owl &middot; <a href="https://linkedin.com/company/applicationowl">LinkedIn</a> &middot; <a href="mailto:info@applicationowl.com">info@applicationowl.com</a>
@@ -245,6 +250,20 @@
     document.querySelector('.menu-toggle').addEventListener('click', function () {
       document.querySelector('.nav-links').classList.toggle('open');
     });
+
+    // Show sticky CTA after scrolling past hero
+    (function() {
+      var stickyCta = document.getElementById('sticky-cta');
+      var hero = document.querySelector('.hero');
+      window.addEventListener('scroll', function() {
+        var heroBottom = hero.getBoundingClientRect().bottom;
+        if (heroBottom < 0) {
+          stickyCta.classList.add('visible');
+        } else {
+          stickyCta.classList.remove('visible');
+        }
+      });
+    })();
   </script>
 
 </body>
