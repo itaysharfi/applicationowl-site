@@ -264,6 +264,50 @@ nav .menu-toggle {
   font-size: 0.95rem;
 }
 
+/* === Feature Rows (screenshot layout) === */
+.feature-row {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+
+.feature-row.reverse {
+  flex-direction: row-reverse;
+}
+
+.feature-row:last-of-type {
+  margin-bottom: 0;
+}
+
+.feature-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.feature-text h3 {
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  color: var(--dark);
+}
+
+.feature-text p {
+  color: var(--text-light);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.feature-screenshot {
+  flex: 1.5;
+  min-width: 0;
+}
+
+.feature-screenshot img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
 .plus-note {
   text-align: center;
   margin-top: 24px;
@@ -573,6 +617,21 @@ footer a:hover {
   .section-title {
     font-size: 1.6rem;
     margin-bottom: 28px;
+  }
+
+  .feature-row,
+  .feature-row.reverse {
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .feature-text {
+    text-align: center;
+  }
+
+  .feature-screenshot img {
+    border-radius: 8px;
   }
 
   .features-grid,
