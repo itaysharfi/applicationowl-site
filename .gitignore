@@ -20,6 +20,10 @@ package-lock.json
 # Build artifacts
 dist/
 .cache/
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
 
 # Tests
 tests/screenshots/
