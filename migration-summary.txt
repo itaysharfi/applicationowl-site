@@ -1,0 +1,26 @@
+xtWebsite Migration Complete - applicationowl.com
+
+We migrated applicationowl.com from Wix to a self-hosted static site on GitHub Pages. Here's what changed:
+
+What's new:
+- Site is now hosted on GitHub Pages (faster, no monthly Wix fee)
+- Payments moved to Stripe (from Wix Payments)
+  - AI Coach: $25/month - direct Stripe checkout
+  - Coached Plan: $195/month + $50 setup - discovery call first, direct subscribe option available
+- Google Analytics tracking added
+- Mobile-optimized layout
+- HTTPS enforced
+
+Pages live:
+- https://applicationowl.com - Homepage
+- https://applicationowl.com/ai-coach.html - AI Coach
+- https://applicationowl.com/coached-plan.html - Coached Plan
+- https://applicationowl.com/pricing.html - Plans & Pricing
+
+Infrastructure:
+- DNS: AWS Route 53
+- Hosting: GitHub Pages (free)
+- Payments: Stripe
+- Repo: github.com/itaysharfi/applicationowl-site
+
+Wix: Renewal stopped. Access continues until end of current billing period.
