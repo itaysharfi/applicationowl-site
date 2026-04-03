@@ -1,0 +1,15 @@
+title: Application Owl
+description: AI career coach built on real hiring experience
+url: "https://www.applicationowl.com"
+baseurl: ""
+permalink: /post/:title/
+markdown: kramdown
+
+# Don't process these
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - migration-summary.txt
+  - tests/
+  - README.md
+  - CNAME
