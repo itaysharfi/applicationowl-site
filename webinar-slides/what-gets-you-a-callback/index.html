@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Actually Gets You a Callback — AppOwl Webinar</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --r-heading-font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --r-main-font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --r-heading-text-transform: none;
+      --r-heading-font-weight: 700;
+      --accent: #4fc3f7;
+      --accent-glow: rgba(79, 195, 247, 0.3);
+      --red: #ef5350;
+      --green: #66bb6a;
+      --amber: #ffa726;
+      --bg-dark: #0d1117;
+      --bg-mid: #131a27;
+    }
+    .reveal { font-size: 28px; }
+    .reveal h1 { font-size: 2.6em; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+    .reveal h2 { font-size: 1.8em; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.4em; }
+    .reveal h3 { font-size: 1.1em; font-weight: 600; }
+    .reveal p { line-height: 1.5; }
+    .reveal .accent { color: var(--accent); }
+    .reveal .red { color: var(--red); }
+    .reveal .green { color: var(--green); }
+    .reveal .amber { color: var(--amber); }
+    .reveal .big-number { font-size: 5em; font-weight: 800; color: var(--accent); text-shadow: 0 0 40px var(--accent-glow); line-height: 1; }
+    .reveal .subtitle { font-size: 0.6em; opacity: 0.5; font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; }
+    .reveal .dim { opacity: 0.5; }
+    .reveal .light { font-weight: 300; }
+    .reveal .small { font-size: 0.65em; opacity: 0.5; }
+    .reveal .progress { display: none !important; }
+    .reveal .controls { opacity: 0.25; }
+    .reveal .controls:hover { opacity: 0.6; }
+    .reveal .gradient-line { width: 80px; height: 3px; background: linear-gradient(90deg, var(--accent), transparent); margin: 0.6em auto; border: none; }
+    .reveal .quote { font-size: 1.05em; font-weight: 300; font-style: italic; opacity: 0.8; max-width: 680px; margin: 0 auto; line-height: 1.5; }
+    .reveal .section-label { font-size: 0.5em; opacity: 0.35; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3em; }
+
+    /* VS Grid */
+    .reveal .vs-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.2em; align-items: start; margin-top: 0.8em; padding: 0 0.5em; }
+    .reveal .vs-col { text-align: left; }
+    .reveal .vs-divider { width: 1px; background: rgba(255,255,255,0.08); align-self: stretch; }
+    .reveal .vs-col h3 { margin-bottom: 0.4em; font-size: 0.7em; }
+    .reveal .vs-col ul { list-style: none; padding: 0; margin: 0; }
+    .reveal .vs-col ul li { font-size: 0.65em; padding: 0.3em 0; opacity: 0.8; line-height: 1.4; }
+    .reveal .vs-col ul li::before { margin-right: 0.3em; font-weight: 700; }
+    .reveal .vs-col.wrong ul li::before { content: "✕"; color: var(--red); }
+    .reveal .vs-col.right ul li::before { content: "✓"; color: var(--green); }
+
+    /* Numbered List */
+    .reveal .numbered-list { list-style: none; padding: 0; margin: 0.6em auto; max-width: 680px; text-align: left; }
+    .reveal .numbered-list li { font-size: 0.72em; padding: 0.45em 0; padding-left: 2em; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; }
+    .reveal .numbered-list li:last-child { border-bottom: none; }
+    .reveal .numbered-list .num { color: var(--accent); font-weight: 700; font-size: 1.1em; position: absolute; left: 0; top: 0.45em; }
+
+    /* Stat Block */
+    .reveal .stat-block { display: flex; justify-content: center; gap: 2.5em; margin-top: 0.8em; }
+    .reveal .stat-item { text-align: center; }
+    .reveal .stat-item .val { font-size: 2.4em; font-weight: 800; color: var(--accent); text-shadow: 0 0 25px var(--accent-glow); line-height: 1.1; }
+    .reveal .stat-item .lbl { font-size: 0.6em; opacity: 0.5; margin-top: 0.3em; line-height: 1.3; }
+
+    /* Three Cards */
+    .reveal .three-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8em; margin-top: 0.6em; padding: 0 0.3em; }
+    .reveal .tcard { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1em 0.8em; text-align: center; }
+    .reveal .tcard:hover { border-color: rgba(79,195,247,0.25); }
+    .reveal .tcard .tnum { display: inline-block; width: 1.6em; height: 1.6em; line-height: 1.6em; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #0288d1); color: white; font-weight: 700; font-size: 0.8em; margin-bottom: 0.3em; }
+    .reveal .tcard h3 { margin: 0.2em 0 0.15em; font-size: 0.72em; font-weight: 600; color: white; }
+    .reveal .tcard p { font-size: 0.52em; opacity: 0.55; margin: 0; line-height: 1.4; }
+
+    /* Six Grid */
+    .reveal .six-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6em; margin-top: 0.6em; padding: 0 0.3em; }
+    .reveal .six-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 0.6em 0.5em; text-align: center; }
+    .reveal .six-card .six-num { color: var(--accent); font-weight: 700; font-size: 0.8em; }
+    .reveal .six-card h3 { font-size: 0.62em; font-weight: 600; margin: 0.15em 0; color: white; }
+    .reveal .six-card p { font-size: 0.52em; opacity: 0.5; margin: 0; line-height: 1.3; }
+
+    /* Poll */
+    .reveal .poll-options { list-style: none; padding: 0; margin: 0.6em auto; max-width: 550px; text-align: left; }
+    .reveal .poll-options li { font-size: 0.72em; padding: 0.4em 0.8em; margin: 0.3em 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; }
+    .reveal .poll-options li span { color: var(--accent); font-weight: 600; margin-right: 0.5em; }
+
+    /* CTA */
+    .reveal .cta-button { display: inline-block; background: linear-gradient(135deg, var(--accent), #0288d1); color: white; padding: 0.6em 1.8em; border-radius: 50px; font-weight: 700; font-size: 0.8em; margin-top: 0.6em; text-decoration: none; box-shadow: 0 4px 20px var(--accent-glow); }
+
+    /* Boxes */
+    .reveal .mistake-box { background: rgba(239,83,80,0.07); border: 1px solid rgba(239,83,80,0.18); border-radius: 12px; padding: 0.8em 1.2em; max-width: 620px; margin: 0.6em auto 0; text-align: left; }
+    .reveal .mistake-box p { font-size: 0.6em; line-height: 1.5; opacity: 0.85; }
+    .reveal .tip-box { background: rgba(79,195,247,0.06); border: 1px solid rgba(79,195,247,0.15); border-radius: 12px; padding: 0.7em 1.2em; max-width: 620px; margin: 0.6em auto 0; text-align: left; }
+    .reveal .tip-box p { font-size: 0.6em; line-height: 1.5; opacity: 0.85; }
+    .reveal .success-box { background: rgba(102,187,106,0.07); border: 1px solid rgba(102,187,106,0.18); border-radius: 12px; padding: 0.8em 1.2em; max-width: 620px; margin: 0.6em auto 0; text-align: left; }
+    .reveal .success-box p { font-size: 0.6em; line-height: 1.5; opacity: 0.85; }
+
+    /* Example posting */
+    .reveal .posting-example { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 0.8em 1.2em; max-width: 640px; margin: 0.5em auto 0; text-align: left; font-size: 0.55em; line-height: 1.5; }
+    .reveal .posting-example .highlight { background: rgba(79,195,247,0.2); padding: 0 0.2em; border-radius: 3px; }
+    .reveal .posting-example .keyword { color: var(--accent); font-weight: 600; }
+
+    .reveal .social-links { margin-top: 0.8em; font-size: 0.55em; opacity: 0.45; }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ===== 1. OPENER ===== -->
+
+      <section data-background-color="#0d1117">
+        <p class="subtitle">Free Live Webinar &middot; April 7, 2026</p>
+        <h1>What Actually Gets<br>You a <span class="accent">Callback</span></h1>
+        <div class="gradient-line"></div>
+        <p style="font-size: 0.6em; font-weight: 300; opacity: 0.55;">The resume secrets hiring managers won't tell you</p>
+        <p style="margin-top: 1.2em; font-size: 0.55em; opacity: 0.3;">Itay Sharfi &middot; <a href="https://applicationowl.com" style="color: inherit; text-decoration: none;">applicationowl.com</a></p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h2>Who am I?</h2>
+        <div class="stat-block">
+          <div class="stat-item fragment">
+            <div class="val">10</div>
+            <div class="lbl">years at Google<br>in software roles</div>
+          </div>
+          <div class="stat-item fragment">
+            <div class="val">1000+</div>
+            <div class="lbl">people coached<br>on job search</div>
+          </div>
+          <div class="stat-item fragment">
+            <div class="val">20+</div>
+            <div class="lbl">years in software<br>Google, Nokia, Moody's, HP</div>
+          </div>
+        </div>
+        <p class="fragment" style="font-size: 0.62em; opacity: 0.55; margin-top: 1em;">AI Product Expert &middot; Adjunct Professor, CS at Cal State Fullerton</p>
+        <p class="fragment" style="font-size: 0.62em; opacity: 0.55; margin-top: 0.2em;">Former tech headhunter &middot; Co-Founder, Application Owl</p>
+      </section>
+
+      <section data-background-color="#0d1117">
+        <h2>How this works</h2>
+        <div class="three-cards" style="grid-template-columns: 1fr 1fr 1fr; max-width: 750px; margin: 0.3em auto 0;">
+          <div class="tcard">
+            <div class="tnum">45</div>
+            <h3>Minutes</h3>
+            <p>Plus live Q&amp;A at the end</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum" style="font-size: 0.55em; width: 2.4em; height: 2.4em; line-height: 2.4em;">Chat</div>
+            <h3>Questions</h3>
+            <p>Submit anytime. I'll pause every few slides.</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum" style="font-size: 0.55em; width: 2.4em; height: 2.4em; line-height: 2.4em;">Goal</div>
+            <h3>Walk Away Ready</h3>
+            <p>Know exactly what to fix on your resume</p>
+          </div>
+        </div>
+        <p class="small" style="margin-top: 0.8em;">Mics muted for smooth experience &middot; Slides available on <a href="https://applicationowl.com" style="color: var(--accent); text-decoration: none;">applicationowl.com</a></p>
+      </section>
+
+      <!-- Poll 1: Self-assessment -->
+      <section data-background-color="#131a27">
+        <h2>Think about this</h2>
+        <p style="font-size: 0.7em; opacity: 0.7; margin-bottom: 0.5em;">Hand your resume to a friend who has never seen your work. Ask them: "What do I do, and would you hire me for [target role]?"</p>
+        <ul class="poll-options">
+          <li><span>A</span> Yes, because I wrote it, so obviously it's clear.</li>
+          <li><span>B</span> Yes, because it genuinely shows I fit the pattern of the role I want.</li>
+          <li><span>C</span> Sort of. They'd get the general idea, but the fit isn't obvious.</li>
+          <li><span>D</span> No. They'd see a list of things I've done with no clear direction.</li>
+        </ul>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.5; margin-top: 0.8em;">If you picked A: you know your story, but they don't. Without proof, it just looks like you rearranged a few lines. B is where you want to be. Most people are at C or D. That's our starting point.</p>
+      </section>
+
+      <!-- ===== 2. THE HOOK ===== -->
+
+      <section data-background-color="#0d1117">
+        <h2>Most job seekers optimize<br>the <span class="red">details</span>, not the <span class="accent">story</span></h2>
+        <div class="fragment">
+          <p class="quote">"They spend hours tweaking bullet points that hiring managers skip, instead of controlling the narrative of who they are."</p>
+        </div>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.5; margin-top: 1em;">The three things that actually decide if you get a callback<br>take up maybe <span class="accent">10% of the resume</span>.</p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h2 class="light" style="opacity: 0.7;">Hiring managers make a decision<br>in the first</h2>
+        <p><span class="big-number">7 sec</span></p>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.45; margin-top: 0.3em;">The other 90% of your resume? Scanned later, if at all.</p>
+      </section>
+
+      <!-- Group exercise -->
+      <section data-background-color="#0d1117">
+        <h2>Let's test this together</h2>
+        <p style="font-size: 0.7em; opacity: 0.7;">I need a volunteer. Share your resume in the chat.</p>
+        <div class="tip-box fragment" style="margin-top: 0.6em;">
+          <p>We will all look at it for <strong>7 seconds</strong>. Then I'll ask the group: What does this person do? What level are they? Would you call them for an interview? No context. Just the resume.</p>
+        </div>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.5; margin-top: 0.8em;">This is exactly what a recruiter does. If we can't tell as a group in 7 seconds, neither can they.</p>
+      </section>
+
+      <!-- The payoff: the 10% -->
+      <section data-background-color="#0d1117">
+        <h2>This is the <span class="accent">10%</span> that decides</h2>
+        <div class="three-cards">
+          <div class="tcard fragment">
+            <div class="tnum">1</div>
+            <h3>Have you done this job?</h3>
+            <p>Title match. Does your current role align with what they're hiring for?</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum">2</div>
+            <h3>Can you prove it?</h3>
+            <p>Impact line. One sentence with numbers that shows you delivered results.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum">3</div>
+            <h3>Can I trust that?</h3>
+            <p>Brand signal. Recognizable company, relevant domain, or strong referral.</p>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.8em;">These three things make up about 10% of your resume, yet they drive 90% of the decision.</p>
+      </section>
+
+      <!-- How to strengthen the 10% -->
+      <section data-background-color="#131a27">
+        <h2>How to <span class="accent">strengthen</span> your 10%</h2>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-bottom: 0.3em;">Your company brand is your brand. Always play it up.</p>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">01</span> <strong>Unknown company?</strong> Add context: "a 200-person B2B SaaS platform serving Fortune 500 clients."</li>
+          <li class="fragment"><span class="num">02</span> <strong>Public company?</strong> Say so. Public companies signal stability, scale, and rigor.</li>
+          <li class="fragment"><span class="num">03</span> <strong>VC-backed startup?</strong> Name the backer: "Series B, backed by Sequoia Capital."</li>
+          <li class="fragment"><span class="num">04</span> <strong>Industry leader?</strong> State the claim: "the #1 platform for X" or "processing 10M transactions/day."</li>
+          <li class="fragment"><span class="num">05</span> <strong>Small or unknown?</strong> Anchor to something recognizable: clients, partners, industry, or scale metrics.</li>
+        </ul>
+      </section>
+
+      <section data-background-color="#0d1117">
+        <h2>Same approach for <span class="accent">title</span> and <span class="accent">impact</span></h2>
+        <div class="vs-grid">
+          <div class="vs-col wrong">
+            <h3 style="color: var(--red);">Weak</h3>
+            <ul>
+              <li>"Software Engineer at Acme Corp"</li>
+              <li>"Led a team"</li>
+              <li>"Improved system performance"</li>
+              <li>"Managed projects"</li>
+            </ul>
+          </div>
+          <div class="vs-divider"></div>
+          <div class="vs-col right">
+            <h3 style="color: var(--green);">Strong</h3>
+            <ul>
+              <li>"Senior Backend Engineer at Acme Corp (Series C, 400 employees, fintech)"</li>
+              <li>"Led a team of 8 engineers across 3 time zones"</li>
+              <li>"Reduced API latency by 40%, saving $200K/year"</li>
+              <li>"Shipped 3 products from zero to 50K users in 12 months"</li>
+            </ul>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.6em;">Every line is a chance to control the narrative. Don't waste any of them.</p>
+      </section>
+
+      <!-- Where they look -->
+      <section data-background-color="#131a27">
+        <h2>Where they <span class="accent">expect</span> to find it</h2>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-bottom: 0.4em;">Recruiters don't read top to bottom. They skim in a pattern:</p>
+        <div class="three-cards" style="grid-template-columns: 1fr 1fr; max-width: 700px; margin: 0.5em auto 0;">
+          <div class="tcard fragment">
+            <div class="tnum">1</div>
+            <h3>Name and Title</h3>
+            <p>First thing they see. Sets the entire frame for how they read you.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum">2</div>
+            <h3>Current Company</h3>
+            <p>Right next to the title. Brand recognition happens here.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum">3</div>
+            <h3>First Bullet</h3>
+            <p>Under your most recent role. This is where they look for proof of impact.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum">4</div>
+            <h3>Skills Section</h3>
+            <p>A quick keyword scan. Often the last thing checked, if at all.</p>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.6em;">If your story isn't clear in 1 through 3, they never reach 4.</p>
+      </section>
+
+      <!-- Social proof -->
+      <section data-background-color="#131a27">
+        <h2>This works</h2>
+        <div class="success-box fragment">
+          <p>I worked with a TPM who wanted to break into AI. We reshaped her resume to make her <strong>look like someone who puts AI into production</strong>: highlighted the right keywords, reframed her experience around AI-adjacent projects, and emphasized relevant results. She took a short AI contract to close the gap. <strong>She just landed an AI TPM role.</strong></p>
+        </div>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.5; margin-top: 0.8em;">Same person. Same skills. Different narrative. Different outcome.</p>
+      </section>
+
+      <!-- ===== 3. WHY QUALIFIED ISN'T ENOUGH ===== -->
+
+      <!-- Market reality -->
+      <section data-background-color="#0d1117">
+        <h2>Today's hiring market has <span class="accent">changed</span></h2>
+        <p style="font-size: 0.65em; opacity: 0.7; margin-bottom: 0.4em;">Teams are leaner. Budgets are tighter. The hiring mindset has shifted.</p>
+        <div class="vs-grid fragment">
+          <div class="vs-col right">
+            <h3 style="opacity: 0.5;">Before</h3>
+            <ul>
+              <li style="opacity: 0.5;">"Hire smart people, they'll figure it out"</li>
+              <li style="opacity: 0.5;">Invest in training and ramp-up</li>
+              <li style="opacity: 0.5;">Bet on potential and culture fit</li>
+            </ul>
+          </div>
+          <div class="vs-divider"></div>
+          <div class="vs-col right">
+            <h3 style="color: var(--accent);">Now</h3>
+            <ul>
+              <li>"Hire someone who's done this exact job before"</li>
+              <li>Expect immediate impact, minimal ramp</li>
+              <li>Prioritize proven output over raw talent</li>
+            </ul>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.6em;">This isn't good or bad. It's the reality. And it means your positioning matters more than ever.</p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <p class="section-label">Part 1</p>
+        <h2>Why being "qualified"<br><span class="dim">isn't enough</span></h2>
+        <div class="tip-box fragment">
+          <p>Employers look for <strong>pattern match</strong>, not just skill. They want to see that you look like someone who has done <em>this specific job</em> before: same <span class="accent">domain</span>, same <span class="accent">seniority</span>, comparable <span class="accent">complexity</span>.</p>
+        </div>
+        <p class="fragment small" style="margin-top: 0.8em;">Your resume and pitch must be personalized to make you look like the pattern of people who do that job. If the pattern isn't obvious, you won't get the call.</p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h2>What most people do <span class="accent">vs.</span> what works</h2>
+        <div class="vs-grid fragment">
+          <div class="vs-col wrong">
+            <h3 style="color: var(--red);">Common mistakes</h3>
+            <ul>
+              <li>List every responsibility they've ever had</li>
+              <li>Copy-paste job description language</li>
+              <li>Add every technology they've touched</li>
+              <li>Write a 2-page wall of text</li>
+              <li>Same resume for every application</li>
+            </ul>
+          </div>
+          <div class="vs-divider"></div>
+          <div class="vs-col right">
+            <h3 style="color: var(--green);">What actually works</h3>
+            <ul>
+              <li>Lead with measurable outcomes</li>
+              <li>Mirror the language of the target role</li>
+              <li>Show progression, not just tenure</li>
+              <li>Make your title, company line, and first bullet undeniable</li>
+              <li>Tailor every single application</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Career changers and students -->
+      <section data-background-color="#0d1117">
+        <h2>What if you <span class="red">don't</span> fit the pattern yet?</h2>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-bottom: 0.4em;">Pattern matching is especially hard for career changers and students. You haven't done the job before, so you don't look like someone who has.</p>
+        <div class="tip-box fragment">
+          <p><strong>The way in:</strong> You need to close the pattern gap before you apply. Not after.</p>
+        </div>
+        <ul class="numbered-list fragment" style="margin-top: 0.4em;">
+          <li><span class="num">01</span> <strong>Reframe what you've done.</strong> A military logistics officer managed cross-functional teams under pressure. That's program management.</li>
+          <li><span class="num">02</span> <strong>Take a short contract or project.</strong> Even 3 months in the target domain changes the pattern completely.</li>
+          <li><span class="num">03</span> <strong>Build in public.</strong> Open-source contributions, certifications, and side projects are proof of capability when work history isn't enough.</li>
+        </ul>
+      </section>
+
+      <!-- How to check the pattern -->
+      <section data-background-color="#131a27">
+        <h2>How do you know if you <span class="accent">fit the pattern</span>?</h2>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">01</span> Look at people who already hold the role you want, at similar or slightly more recognized companies.</li>
+          <li class="fragment"><span class="num">02</span> Study their LinkedIn profiles. What titles, keywords, and accomplishments show up repeatedly?</li>
+          <li class="fragment"><span class="num">03</span> Compare your resume to theirs. Where do you match? Where are the gaps?</li>
+          <li class="fragment"><span class="num">04</span> Rewrite your resume to close those gaps with language and framing, not fabrication.</li>
+        </ul>
+        <p class="fragment small" style="margin-top: 0.6em;">You can also use Application Owl's AI resume analysis to identify pattern gaps automatically.</p>
+      </section>
+
+      <!-- ===== 4. REVERSE-ENGINEER ===== -->
+
+      <section data-background-color="#0d1117">
+        <p class="section-label">Part 2</p>
+        <h2>How to reverse-engineer<br>any <span class="accent">job posting</span></h2>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">01</span> Highlight the <strong>verbs</strong>. They reveal what the team needs.</li>
+          <li class="fragment"><span class="num">02</span> Find the <strong>repeated keywords</strong>. Those are the non-negotiables.</li>
+          <li class="fragment"><span class="num">03</span> Match your <strong>title, company line, and first bullet</strong> to those keywords</li>
+          <li class="fragment"><span class="num">04</span> If you can't match 2 of 3, <strong>it's not your role</strong>. Move on.</li>
+        </ul>
+      </section>
+
+      <!-- Real example: the posting -->
+      <section data-background-color="#131a27">
+        <h2>Let's try it: real posting</h2>
+        <div class="posting-example">
+          <p style="opacity: 0.4; margin-bottom: 0.3em;">Senior Product Manager, SaaS Platform</p>
+          <p>"We're looking for someone to <span class="keyword">lead cross-functional teams</span> to <span class="keyword">define and ship product roadmaps</span> for our B2B platform. You'll <span class="keyword">drive adoption metrics</span>, work closely with engineering, and <span class="keyword">translate customer feedback</span> into actionable product decisions."</p>
+        </div>
+        <div class="tip-box fragment" style="margin-top: 0.5em;">
+          <p><strong>The keywords:</strong> cross-functional, roadmaps, B2B, adoption metrics, customer feedback.<br><strong>The verbs:</strong> lead, define, ship, drive, translate.</p>
+        </div>
+      </section>
+
+      <!-- Real example: the matched resume -->
+      <section data-background-color="#0d1117">
+        <h2>Now write the <span class="accent">matching bullet</span></h2>
+        <div class="mistake-box fragment">
+          <p><strong style="color: var(--red);">Generic bullet:</strong> "Managed product development and worked with engineering teams on various projects."</p>
+        </div>
+        <div class="success-box fragment" style="margin-top: 0.4em;">
+          <p><strong style="color: var(--green);">Matched bullet:</strong> "Led a cross-functional team of 12 to define and ship the B2B product roadmap, driving a 35% increase in adoption metrics by translating customer feedback into quarterly product decisions."</p>
+        </div>
+        <p class="fragment small" style="margin-top: 0.6em;">Same experience. Different framing. Every keyword from the posting is now in your resume.</p>
+      </section>
+
+      <!-- ATS -->
+      <section data-background-color="#0d1117">
+        <h2>The ATS is <span class="accent">pattern matching</span> too</h2>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-bottom: 0.4em;">Before a human ever sees your resume, the ATS is doing the same thing: looking for the pattern.</p>
+        <div class="three-cards">
+          <div class="tcard fragment">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--amber), #e65100);">1</div>
+            <h3>Title</h3>
+            <p>Does your title match the role? "Product Manager" vs. "Project Coordinator" is a different pattern.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--amber), #e65100);">2</div>
+            <h3>Companies</h3>
+            <p>Have you worked in a similar industry, size, or domain? The system checks for overlap.</p>
+          </div>
+          <div class="tcard fragment">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--amber), #e65100);">3</div>
+            <h3>Technology</h3>
+            <p>Exact keyword match. If the posting says "Python," don't write "scripting languages."</p>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.5em;">Standard headings. Plain formatting. Use their exact words. The ATS is literal.</p>
+      </section>
+
+      <!-- Poll 2: Live exercise -->
+      <section data-background-color="#131a27">
+        <h2>Try this right now</h2>
+        <p style="font-size: 0.7em; opacity: 0.7; margin-bottom: 0.5em;">Open your resume. Read the first bullet under your most recent role.</p>
+        <ul class="poll-options">
+          <li><span>1</span> Does it contain a number or measurable result?</li>
+          <li><span>2</span> Would a stranger know your impact from this one line?</li>
+          <li><span>3</span> Does it use language from the jobs you're targeting?</li>
+        </ul>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.5; margin-top: 0.8em;">If any answer is no, that single bullet is costing you callbacks.</p>
+      </section>
+
+      <!-- ===== 5. BIGGEST MISTAKE ===== -->
+
+      <section data-background-color="#0d1117">
+        <p class="section-label">Part 3</p>
+        <h2>The biggest mistake<br>experienced professionals make</h2>
+        <div class="mistake-box fragment">
+          <p><strong style="color: var(--red);">They write a resume about their past</strong><br>instead of a resume about the <strong>hiring manager's future</strong>.</p>
+        </div>
+        <p class="fragment" style="font-size: 0.6em; opacity: 0.6; margin-top: 0.8em;">The hiring manager has a problem to solve. Your resume should say:<br>"<span class="accent">I've solved this exact problem before. Here's proof.</span>"</p>
+      </section>
+
+      <!-- Tell me about yourself exercise -->
+      <section data-background-color="#131a27">
+        <h2>Exercise: tell me about yourself</h2>
+        <p style="font-size: 0.65em; opacity: 0.7; margin-bottom: 0.4em;">This is the most common opening in any conversation with a recruiter, interviewer, or connection. Most people get it wrong.</p>
+        <div class="mistake-box fragment">
+          <p><strong style="color: var(--red);">What most people do:</strong> Recite their career history from the beginning. "I started at company X, then moved to Y, then Z..."</p>
+        </div>
+        <div class="success-box fragment" style="margin-top: 0.4em;">
+          <p><strong style="color: var(--green);">What works:</strong> Lead with who you are now, the impact you make, and why you're relevant to them. 60 seconds. Future-facing.</p>
+        </div>
+      </section>
+
+      <section data-background-color="#0d1117">
+        <h2>Let's practice</h2>
+        <p style="font-size: 0.7em; opacity: 0.7; margin-bottom: 0.4em;">I need a volunteer. You have 60 seconds.</p>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">01</span> <strong>Who you are.</strong> Role, expertise, one line. Not your life story.</li>
+          <li class="fragment"><span class="num">02</span> <strong>What you've delivered.</strong> One or two results with numbers.</li>
+          <li class="fragment"><span class="num">03</span> <strong>Why you're here.</strong> What you're looking for and why it's a fit.</li>
+        </ul>
+        <p class="fragment small" style="margin-top: 0.8em;">Same structure works for networking events, recruiter calls, and the first 30 seconds of any interview.</p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h2>Your <span class="accent">LinkedIn</span> is your other resume</h2>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">01</span> Recruiters search LinkedIn <strong>before</strong> seeing your resume</li>
+          <li class="fragment"><span class="num">02</span> Your headline must match target role keywords</li>
+          <li class="fragment"><span class="num">03</span> Referrals often start with "I saw their LinkedIn"</li>
+          <li class="fragment"><span class="num">04</span> Mismatched LinkedIn + resume = instant red flag</li>
+        </ul>
+        <p class="fragment small" style="margin-top: 0.6em;">Sourcers find you. Recruiters gate you. Optimize for both.</p>
+      </section>
+
+      <section data-background-color="#0d1117">
+        <h2>The <span class="accent">referral</span> shortcut</h2>
+        <p style="font-size: 0.65em; opacity: 0.7;">Referrals bypass application noise. But not all referrals are equal.</p>
+        <div class="three-cards fragment" style="margin-top: 0.5em;">
+          <div class="tcard">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--green), #2e7d32);">1</div>
+            <h3>Knows You</h3>
+            <p>Familiar with your work ethic and skills firsthand</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--green), #2e7d32);">2</div>
+            <h3>Understands the Role</h3>
+            <p>Knows what the team needs and how you fit</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum" style="background: linear-gradient(135deg, var(--green), #2e7d32);">3</div>
+            <h3>Credible Source</h3>
+            <p>Internal employee whose word carries weight</p>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.5em;">Best referral: "I've worked with them. They're a perfect match for this role."</p>
+      </section>
+
+      <!-- ===== 6. PUTTING IT TOGETHER ===== -->
+
+      <section data-background-color="#131a27">
+        <p class="section-label">Putting it all together</p>
+        <h2>The Big 6 Factors</h2>
+        <div class="six-grid">
+          <div class="six-card fragment">
+            <div class="six-num">01</div>
+            <h3>Company</h3>
+            <p>Target growing orgs with open headcount</p>
+          </div>
+          <div class="six-card fragment">
+            <div class="six-num">02</div>
+            <h3>Position</h3>
+            <p>High-demand roles that match your profile</p>
+          </div>
+          <div class="six-card fragment">
+            <div class="six-num">03</div>
+            <h3>Resume</h3>
+            <p>Tailored to each role. Title and first bullet decisive.</p>
+          </div>
+          <div class="six-card fragment">
+            <div class="six-num">04</div>
+            <h3>Referral</h3>
+            <p>A credible insider who can vouch for you</p>
+          </div>
+          <div class="six-card fragment">
+            <div class="six-num">05</div>
+            <h3>ATS Screening</h3>
+            <p>Exact keywords, standard format, clean PDF</p>
+          </div>
+          <div class="six-card fragment">
+            <div class="six-num">06</div>
+            <h3>Recruiter</h3>
+            <p>Compelling first impression in 30 seconds</p>
+          </div>
+        </div>
+        <p class="fragment small" style="margin-top: 0.5em;">Most people only optimize #3. The ones who land interviews work all six.</p>
+      </section>
+
+      <!-- Poll 3: Which factor -->
+      <section data-background-color="#0d1117">
+        <h2>Which is your biggest gap?</h2>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-bottom: 0.4em;">Of the 6 factors, which one needs the most work? (type in chat)</p>
+        <ul class="poll-options">
+          <li><span>1</span> Company: I'm applying broadly, not strategically.</li>
+          <li><span>2</span> Resume: It's generic, not tailored per role.</li>
+          <li><span>3</span> Referrals: I'm relying purely on online applications.</li>
+          <li><span>4</span> ATS: I suspect my resume gets filtered before a human sees it.</li>
+        </ul>
+      </section>
+
+      <!-- ===== 7. ACTION + CTA ===== -->
+
+      <section data-background-color="#131a27">
+        <h2>Your action plan <span class="accent">this week</span></h2>
+        <ul class="numbered-list">
+          <li class="fragment"><span class="num">1</span> Pick 3 target roles. Find repeated keywords across their postings.</li>
+          <li class="fragment"><span class="num">2</span> Rewrite your title, company line, and first bullet to match those keywords. Add numbers.</li>
+          <li class="fragment"><span class="num">3</span> Update your LinkedIn headline to match your target role title.</li>
+          <li class="fragment"><span class="num">4</span> Reach out to 2 people at target companies for a warm intro.</li>
+          <li class="fragment"><span class="num">5</span> Submit 5 tailored applications. Not 50 generic ones.</li>
+        </ul>
+      </section>
+
+      <!-- Bridge to CTA -->
+      <section data-background-color="#0d1117">
+        <h2>The hard part?</h2>
+        <p class="fragment" style="font-size: 0.7em; opacity: 0.7;">Tailoring every resume manually takes <span class="accent">30-60 minutes per application</span>.</p>
+        <p class="fragment" style="font-size: 0.7em; opacity: 0.7; margin-top: 0.5em;">Multiply that by 5 applications a week and you're spending<br>your entire job search just rewriting.</p>
+        <p class="fragment" style="font-size: 0.65em; opacity: 0.5; margin-top: 0.8em;">What if you could automate the tailoring and spend your time on what matters?</p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h2>Application Owl does this for you</h2>
+        <div class="three-cards fragment">
+          <div class="tcard">
+            <div class="tnum">1</div>
+            <h3>AI Resume Tailoring</h3>
+            <p>Matches your resume to each posting's keywords automatically</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum">2</div>
+            <h3>Smart Applications</h3>
+            <p>Apply to targeted roles in minutes, not hours</p>
+          </div>
+          <div class="tcard">
+            <div class="tnum">3</div>
+            <h3>Expert Resume Review</h3>
+            <p>Professional feedback on what to fix</p>
+          </div>
+        </div>
+        <p class="fragment" style="margin-top: 0.8em;">
+          <a class="cta-button" href="#">Start Your Free 3-Day Trial</a>
+        </p>
+        <p class="fragment small" style="margin-top: 0.4em;"><a href="https://applicationowl.com" style="color: var(--accent); text-decoration: none;">applicationowl.com</a> &middot; No credit card required</p>
+      </section>
+
+      <!-- Q&A -->
+      <section data-background-color="#0d1117">
+        <h2>Q&amp;A</h2>
+        <p style="font-size: 0.65em; font-weight: 300; opacity: 0.55;">Let's talk about your applications.</p>
+        <div class="gradient-line" style="margin: 0.8em auto;"></div>
+        <p style="font-size: 0.55em; opacity: 0.4; margin-top: 1em;"><a href="https://linkedin.com/in/itaysharfi" style="color: var(--accent); text-decoration: none;">linkedin.com/in/itaysharfi</a><br><a href="mailto:info@applicationowl.com" style="color: var(--accent); text-decoration: none;">info@applicationowl.com</a></p>
+      </section>
+
+      <section data-background-color="#131a27">
+        <h1>Thank You</h1>
+        <div class="gradient-line"></div>
+        <p style="font-size: 0.65em; opacity: 0.6; margin-top: 0.5em;">Follow me on LinkedIn for weekly tips on job search and resumes.</p>
+        <div class="social-links" style="margin-top: 0.5em;">
+          <p><a href="https://linkedin.com/in/itaysharfi" style="color: var(--accent); text-decoration: none;">linkedin.com/in/itaysharfi</a></p>
+          <p><a href="https://applicationowl.com" style="color: var(--accent); text-decoration: none;">applicationowl.com</a></p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Table of contents overlay (press T to toggle) -->
+  <div id="toc-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(13,17,23,0.95); z-index:9999; overflow-y:auto; padding:3em 4em;">
+    <div style="max-width:700px; margin:0 auto; font-family:Inter,sans-serif; color:white;">
+      <h2 style="font-size:1.4em; margin-bottom:0.8em; color:#4fc3f7;">Table of Contents <span style="font-size:0.5em; opacity:0.4;">(press T to close)</span></h2>
+      <div id="toc-list" style="font-size:0.85em; line-height:2;"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      transition: 'slide',
+      backgroundTransition: 'fade',
+      controls: true,
+      progress: false,
+      center: true,
+    });
+
+    // Build TOC from slide headings
+    Reveal.on('ready', () => {
+      const slides = document.querySelectorAll('.reveal .slides > section');
+      const tocList = document.getElementById('toc-list');
+      slides.forEach((slide, i) => {
+        const h = slide.querySelector('h1, h2');
+        if (!h) return;
+        const title = h.textContent.trim();
+        const label = slide.querySelector('.section-label');
+        const prefix = label ? `<span style="color:#4fc3f7; opacity:0.5; font-size:0.8em;">${label.textContent} </span>` : '';
+        const link = document.createElement('div');
+        link.innerHTML = `<span style="color:#4fc3f7; opacity:0.4; margin-right:0.5em;">${i+1}.</span>${prefix}${title}`;
+        link.style.cursor = 'pointer';
+        link.style.padding = '0.1em 0.4em';
+        link.style.borderRadius = '4px';
+        link.onmouseenter = () => link.style.background = 'rgba(79,195,247,0.1)';
+        link.onmouseleave = () => link.style.background = 'none';
+        link.onclick = () => { Reveal.slide(i); document.getElementById('toc-overlay').style.display = 'none'; };
+        tocList.appendChild(link);
+      });
+    });
+
+    // Toggle TOC with T key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 't' || e.key === 'T') {
+        const toc = document.getElementById('toc-overlay');
+        toc.style.display = toc.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+  </script>
+</body>
+</html>
