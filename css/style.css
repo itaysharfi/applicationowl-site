@@ -243,6 +243,31 @@ nav .menu-toggle {
   grid-template-columns: repeat(2, 1fr);
 }
 
+/* === How It Works (5-step grid) === */
+.how-it-works {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.how-it-works .feature-card {
+  text-align: left;
+}
+
+.how-it-works .feature-card .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
 .feature-card {
   text-align: center;
   padding: 32px 24px;
@@ -641,6 +666,11 @@ footer a:hover {
 
   .features-grid,
   .features-grid.cols-4 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .how-it-works {
     grid-template-columns: 1fr;
     gap: 16px;
   }
