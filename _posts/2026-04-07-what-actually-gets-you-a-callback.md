@@ -38,6 +38,6 @@ Use arrow keys to navigate. Press `T` for a table of contents. Press `O` for an 
 
 ## Try It
 
-If you want to put this into practice, [start a free 3-day trial](https://applicationowl.com) of Application Owl. No credit card required.
+If you want to put this into practice, [start a free 3-day trial](https://applicationowl.com) of Application Owl.
 
 Follow me on [LinkedIn](https://linkedin.com/in/itaysharfi) for weekly tips on job search and resumes.
