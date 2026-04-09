@@ -4,6 +4,8 @@ url: "https://www.applicationowl.com"
 baseurl: ""
 permalink: /post/:title/
 markdown: kramdown
+plugins:
+  - jekyll-redirect-from
 
 # Don't process these
 exclude:
