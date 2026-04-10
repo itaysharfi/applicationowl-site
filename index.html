@@ -62,6 +62,33 @@ redirect_from:
     </div>
   </section>
 
+  <!-- Persona entry points -->
+  <section class="alt">
+    <div class="container">
+      <h2 class="section-title">Sound familiar?</h2>
+      <div class="features-grid" style="max-width:960px; margin:0 auto;">
+        <div class="feature-card" style="border:1px solid var(--border); border-radius:var(--radius); text-align:left;">
+          <div class="icon" style="font-size:1.8rem;">📭</div>
+          <h3>Not getting callbacks?</h3>
+          <p>You're applying to dozens of jobs with the same resume. Our AI analyzes each posting and shows you exactly what to change so recruiters actually respond.</p>
+          <a href="https://chat-dev.applicationowl.com/login" class="btn btn-primary" style="margin-top:16px; display:inline-block; font-size:0.9rem;">Try Free for 3 Days</a>
+        </div>
+        <div class="feature-card" style="border:1px solid var(--border); border-radius:var(--radius); text-align:left;">
+          <div class="icon" style="font-size:1.8rem;">🔄</div>
+          <h3>Changing careers?</h3>
+          <p>Your experience is valuable but your resume doesn't translate it yet. We help you reposition your background for the role you actually want.</p>
+          <a href="https://chat-dev.applicationowl.com/login" class="btn btn-primary" style="margin-top:16px; display:inline-block; font-size:0.9rem;">Try Free for 3 Days</a>
+        </div>
+        <div class="feature-card" style="border:1px solid var(--border); border-radius:var(--radius); text-align:left;">
+          <div class="icon" style="font-size:1.8rem;">🎯</div>
+          <h3>Getting to final rounds but not closing?</h3>
+          <p>The interview bar has changed. Practice with questions and feedback based on real hiring rubrics from Google, Nokia, and HP experience.</p>
+          <a href="https://chat-dev.applicationowl.com/login" class="btn btn-primary" style="margin-top:16px; display:inline-block; font-size:0.9rem;">Try Free for 3 Days</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- How It Works (per-position loop) -->
   <section>
     <div class="container">
@@ -318,6 +345,84 @@ redirect_from:
           stickyCta.classList.remove('visible');
         }
       });
+    })();
+
+    // --- Analytics: custom GA4 events ---
+    (function() {
+      // CTA click tracking
+      document.querySelectorAll('a').forEach(function(el) {
+        var href = el.href || '';
+        var label = '';
+        if (href.indexOf('chat-dev.applicationowl.com') !== -1) {
+          label = 'try_free';
+        } else if (href.indexOf('buy.stripe.com') !== -1) {
+          label = 'stripe_subscribe';
+        } else if (href.indexOf('mailto:') !== -1) {
+          label = 'contact_email';
+        }
+        if (label) {
+          el.addEventListener('click', function() {
+            gtag('event', 'cta_click', {
+              event_label: label,
+              link_text: el.textContent.trim().substring(0, 50),
+              page_section: el.closest('section, nav, footer, .hero, .pricing-cta, .sticky-cta')
+                ? el.closest('section, nav, footer, .hero, .pricing-cta, .sticky-cta').className || 'unknown'
+                : 'unknown'
+            });
+          });
+        }
+      });
+
+      // Scroll depth tracking (25%, 50%, 75%, 100%)
+      var scrollMarks = { 25: false, 50: false, 75: false, 100: false };
+      window.addEventListener('scroll', function() {
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var pct = Math.round((window.scrollY / docHeight) * 100);
+        [25, 50, 75, 100].forEach(function(mark) {
+          if (pct >= mark && !scrollMarks[mark]) {
+            scrollMarks[mark] = true;
+            gtag('event', 'scroll_depth', { depth_percent: mark });
+          }
+        });
+      });
+
+      // FAQ open tracking
+      document.querySelectorAll('details.faq-item').forEach(function(el) {
+        el.addEventListener('toggle', function() {
+          if (el.open) {
+            var summary = el.querySelector('summary');
+            gtag('event', 'faq_open', {
+              event_label: summary ? summary.textContent.trim().substring(0, 80) : 'unknown'
+            });
+          }
+        });
+      });
+
+      // YouTube video tracking via IFrame API
+      var videoTracked = { play: false, complete: false };
+      window.onYouTubeIframeAPIReady = function() {
+        var iframe = document.querySelector('iframe[src*="youtube"]');
+        if (!iframe) return;
+        iframe.id = iframe.id || 'yt-player';
+        var player = new YT.Player(iframe.id, {
+          events: {
+            onStateChange: function(e) {
+              if (e.data === YT.PlayerState.PLAYING && !videoTracked.play) {
+                videoTracked.play = true;
+                gtag('event', 'video_play', { video_id: 'CbdR32CDeB0' });
+              }
+              if (e.data === YT.PlayerState.ENDED && !videoTracked.complete) {
+                videoTracked.complete = true;
+                gtag('event', 'video_complete', { video_id: 'CbdR32CDeB0' });
+              }
+            }
+          }
+        });
+      };
+      var ytScript = document.createElement('script');
+      ytScript.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(ytScript);
     })();
   </script>
 

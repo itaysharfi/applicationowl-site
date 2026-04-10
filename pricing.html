@@ -95,6 +95,24 @@
     document.querySelector('.menu-toggle').addEventListener('click', function () {
       document.querySelector('.nav-links').classList.toggle('open');
     });
+
+    // --- Analytics: CTA click tracking ---
+    document.querySelectorAll('a').forEach(function(el) {
+      var href = el.href || '';
+      var label = '';
+      if (href.indexOf('chat-dev.applicationowl.com') !== -1) label = 'try_free';
+      else if (href.indexOf('buy.stripe.com') !== -1) label = 'stripe_subscribe';
+      else if (href.indexOf('mailto:') !== -1) label = 'contact_email';
+      if (label) {
+        el.addEventListener('click', function() {
+          gtag('event', 'cta_click', {
+            event_label: label,
+            link_text: el.textContent.trim().substring(0, 50),
+            page_path: '/pricing.html'
+          });
+        });
+      }
+    });
   </script>
 
 </body>
