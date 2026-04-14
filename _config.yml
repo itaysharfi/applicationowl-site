@@ -1,6 +1,6 @@
 title: Application Owl
 description: AI career coach built on real hiring experience
-url: "https://www.applicationowl.com"
+url: "https://applicationowl.com"
 baseurl: ""
 permalink: /post/:title/
 markdown: kramdown
