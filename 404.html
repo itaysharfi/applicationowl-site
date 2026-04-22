@@ -7,57 +7,29 @@ permalink: /404.html
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Page Not Found - Application Owl</title>
-  <meta name="description" content="The page you're looking for has moved. Visit our blog or homepage.">
-  <link rel="stylesheet" href="/css/style.css">
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8BHKSQ7K93"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-8BHKSQ7K93');
-  </script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #1a1a2e;
+      color: #ccc;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+    h1 { font-size: 1.8rem; color: #fff; margin-bottom: 16px; }
+    p { font-size: 1.05rem; color: #aaa; margin-bottom: 24px; }
+    a { color: #1a73e8; text-decoration: none; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
-
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="logo">Application Owl</a>
-      <button class="menu-toggle" aria-label="Toggle menu">&#9776;</button>
-      <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/ai-coach.html">AI Coach</a></li>
-        <li><a href="/coached-plan.html">Coached Plan</a></li>
-        <li><a href="/blog">Blog</a></li>
-        <li><a href="https://chat-dev.applicationowl.com/login">Log In</a></li>
-        <li><a href="https://chat-dev.applicationowl.com/login" class="btn btn-primary btn-nav">Try Free</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <section class="hero" style="padding: 80px 0;">
-    <div class="container" style="text-align: center;">
-      <h1 style="font-size: 2.2rem;">Page Not Found</h1>
-      <p style="max-width: 500px; margin: 20px auto 32px;">This page may have moved when we updated the site. Try one of these instead:</p>
-      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="/" class="btn btn-primary">Homepage</a>
-        <a href="/ai-coach.html" class="btn btn-outline" style="border-color: #fff; color: #fff;">AI Coach</a>
-        <a href="/blog" class="btn btn-outline" style="border-color: #fff; color: #fff;">Blog</a>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      &copy; 2026 by Application Owl &middot; <a href="https://linkedin.com/company/applicationowl">LinkedIn</a> &middot; <a href="mailto:info@applicationowl.com">info@applicationowl.com</a>
-    </div>
-  </footer>
-
-  <script>
-    document.querySelector('.menu-toggle').addEventListener('click', function () {
-      document.querySelector('.nav-links').classList.toggle('open');
-    });
-  </script>
-
+  <div>
+    <h1>Page not found</h1>
+    <p>Application Owl has shut down. <a href="/">Read our farewell note.</a></p>
+  </div>
 </body>
 </html>
